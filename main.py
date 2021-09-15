@@ -80,21 +80,21 @@ agg_df.groupby(["SEGMENT"]).agg({"PRICE": ["mean", "max", "sum"]})
 agg_df[agg_df["SEGMENT"] == "C"].describe()
 
 # Classify new customers by segment and estimate how much income they bring
-# What segment does a 33-year-old Turkish woman using ANDROID belong to
+# What segment does a 25-year-old French man using ANDROID belong to
 # and how much income is expected to earn on average?
 
-new_user = "TUR_ANDROID_FEMALE_31_40"
+new_user = "fra_android_male_24_30"
 print(agg_df[agg_df["customers_level_based"] == new_user])
 
-#      customers_level_based      PRICE SEGMENT
-#   3  TUR_ANDROID_FEMALE_31_40  41.833333       A
+#      customers_level_based  PRICE SEGMENT
+#  74  fra_android_male_24_30   33.0       C
 
 
-# What segment does a 35-year-old French woman using IOS belong to
+# What segment does a 35-year-old Turkish woman using IOS belong to
 # and how much income is expected to earn on average?
 
-new_user = "FRA_IOS_FEMALE_31_40"
+new_user = "tur_ios_female_31_40"
 print(agg_df[agg_df["customers_level_based"] == new_user])
 
-#      customers_level_based      PRICE SEGMENT
-#   78  FRA_IOS_FEMALE_31_40  32.818182       C
+#    customers_level_based      PRICE SEGMENT
+#  81  tur_ios_female_31_40  32.333333       D
