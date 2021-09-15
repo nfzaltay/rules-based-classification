@@ -7,7 +7,7 @@
 import pandas as pd
 
 # Reading persona.csv as pandas DataFrame
-df = pd.read_csv(r"Week2/data/persona.csv")
+df = pd.read_csv(r"data/persona.csv")
 
 # Analyze descriptive statistics
 df.head()
