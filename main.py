@@ -9,40 +9,44 @@ import pandas as pd
 # Reading persona.csv as pandas DataFrame
 df = pd.read_csv(r"data/persona.csv")
 
-# Analyze descriptive statistics
-df.head()
-df.shape
-df.describe().T
-df.isnull().values.any()
-df.isnull().sum()
 
-# Number of unique <SOURCE>
-df["SOURCE"].nunique()
-df["SOURCE"].value_counts()
+def check_df(dataframe):
+    # Analyze descriptive statistics
+    print(f"""
+        ##################### Shape #####################\n\n\t{dataframe.shape}\n
+        ##################### Types #####################\n\n{dataframe.dtypes}\n
+        ##################### Head #####################\n\n{dataframe.head(3)}\n
+        ##################### NA #####################\n\n{dataframe.isnull().sum()}\n
+        ##################### Quantiles #####################\n\n{dataframe.quantile([0, 0.05, 0.50, 0.95, 0.99, 1]).T}
+        \n""")
 
-# Number of unique <PRICE>
 
-df["PRICE"].nunique()
+check_df(df)
 
-# Frequency of <COUNTRY>
 
-df["COUNTRY"].value_counts()
+def data_analysis(dataframe):
+    # Data Analysis
+    # Number of unique <SOURCE>
+    print("Unique Values of Source:\n", dataframe["SOURCE"].nunique())
+    print("Frequency of Source:\n", dataframe["SOURCE"].value_counts())
 
-# Country breakdown of sales
+    # Number of unique <PRICE>
+    print("Unique Values of Price:\n", dataframe["PRICE"].nunique())
 
-df.groupby("COUNTRY").agg({"PRICE": "sum"})
+    # Frequency of <COUNTRY>
+    print("Number of product sales by country:\n", dataframe["COUNTRY"].value_counts())
 
-# Country breakdown of sales
+    # Total & average amount of sales by country
+    print("Total & average amount of sales by country:\n", dataframe.groupby("COUNTRY").agg({"PRICE": ["mean", "sum"]}))
 
-df['SOURCE'].value_counts()
+    # Average amount of sales by source and country:
+    print("Average amount of sales by source and country:\n", dataframe.pivot_table(values=['PRICE'],
+                                                                                    index=['COUNTRY'],
+                                                                                    columns=["SOURCE"],
+                                                                                    aggfunc=["mean"]))
 
-# Country breakdown of income averages
 
-df.groupby("COUNTRY")["PRICE"].agg({"mean"})
-
-# Country and Source breakdown of income averages
-
-df.groupby(["COUNTRY", 'SOURCE'])["PRICE"].mean()
+data_analysis(df)
 
 # Average income on the basis of variables,
 
@@ -51,13 +55,13 @@ agg_df = df.groupby(["COUNTRY", 'SOURCE', "SEX", "AGE"])["PRICE"].mean().sort_va
 # Convert the index names to variable names
 
 agg_df = agg_df.reset_index()
-agg_df.head()
+print(agg_df.head())
 
 # Convert AGE variable to categorical variable and adding it to agg_df
 
 my_labels = ['0_18', '19_23', '24_30', '31_40', '41_70']
 agg_df["AGE_CUT"] = pd.cut(x=agg_df["AGE"], bins=[0, 18, 23, 30, 40, 70], labels=my_labels)
-agg_df.tail(10)
+print(agg_df.tail(10))
 
 # Identify new level-based customers (Personas)
 
@@ -67,7 +71,7 @@ agg_df = agg_df.loc[:, ["customers_level_based", "PRICE"]].groupby("customers_le
     .agg({"PRICE": "mean"}).sort_values(by="PRICE", ascending=False).reset_index()
 
 
-agg_df["customers_level_based"].head()
+print(agg_df["customers_level_based"].head())
 
 # Segment new customers (Personas)
 
