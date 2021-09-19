@@ -2,9 +2,15 @@
 # PROJECT : Potential Customer Return Calculation with Rule-Based Classification
 # Main object: Recognizing a simple data and by performing certain data arrangements
 #              calculating the potential return of mobile game market users
+
+# A game company wants to create level-based new customer definitions (personas) by using some
+# features ( Country, Source, Age, Sex) of its customers, and to create segments according to these new customer
+# definitions and to estimate how much profit can be generated from  the new customers according to these segments.
 ###############################################
 
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Reading persona.csv as pandas DataFrame
 df = pd.read_csv(r"data/persona.csv")
@@ -23,6 +29,23 @@ def check_df(dataframe):
 
 check_df(df)
 
+
+def num_summary(dataframe, plot=False):
+    numerical_col = ['PRICE', 'AGE']
+    quantiles = [0.25, 0.50, 0.75, 1]
+    for col_name in numerical_col:
+        print("########## Summary Statistics of " + col_name + " ############")
+        print(dataframe[numerical_col].describe(quantiles).T)
+
+        if plot:
+            sns.histplot(data=dataframe, x=col_name)
+            plt.xlabel(col_name)
+            plt.title("The distribution of " + col_name)
+            plt.grid(True)
+            plt.show(block=True)
+
+
+num_summary(df, plot=True)
 
 def data_analysis(dataframe):
     # Data Analysis
